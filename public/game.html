@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>Tic Tac Toe</title>
+	<style type="text/css">
+		.gameBoard{
+			width: 100%;
+			height: 100%;
+		}
+		.endGameImage{
+			width: 33%;
+			height: auto;
+		}
+		td{
+			width: 33%;
+			height: 33%;
+			font-size: 72pt;
+			text-align: center;
+		}
+		.redSquare{
+			background-color: red;
+		}
+		.blueSquare{
+			background-color: blue;
+		}
+	</style>
+
+	<!-- This allows access to $ which makes it easy to change the HTML elements and defines the $ variable -->
+		<script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous"></script>
+</head>
+<body>
+
+<table class="gameBoard">
+<tr>
+<!-- passing "this" to make move means you're passing the td element that got clicked -->
+	<td id="row0col0" onclick="makeMove(this)">-</td>
+	<td id="row0col1" onclick="makeMove(this)">-</td>
+	<td id="row0col2" onclick="makeMove(this)">-</td>
+</tr>
+<tr>
+	<td id="row1col0" onclick="makeMove(this)">-</td>
+	<td id="row1col1" onclick="makeMove(this)">-</td>
+	<td id="row1col2" onclick="makeMove(this)">-</td>
+</tr>
+
+<tr>
+	<td id="row2col0" onclick="makeMove(this)">-</td>
+	<td id="row2col1" onclick="makeMove(this)">-</td>
+	<td id="row2col2" onclick="makeMove(this)">-</td>
+</tr> 
+</table>
+
+
+
+<div id="endGameContent">
+	
+</div>
+
+<button onclick="clearBoard()">New Game</button>
+
+</body>
+<script>
+var count = 0;
+var row0 = ['row0col0', 'row0col1', 'row0col2'];
+var row1 = ['row1col0', 'row1col1', 'row1col2'];
+var row2 = ['row2col0', 'row2col1', 'row2col2'];
+var tieUrl = 'https://news.nationalgeographic.com/content/dam/news/photos/000/755/75552.ngsversion.1422285553360.adapt.1900.1.jpg';
+var winnerUrl = 'http://nolimitssportsandfitness.com/wp-content/uploads/sites/9/2016/04/Champion-1.jpg'
+
+/***
+	This is fired when a user clicks on a tic-tac-toe square
+***/
+function makeMove(square){
+	//Jquery is "selecting" the td element and then extracting its text so we can see 
+	//If the text is a -, if it is, set it to an X or O (increment the counter) based on whose turn it is.
+	var squareText = $(square).text();
+	if(squareText == '-'){
+		count = count + 1;
+		setSquare(square);
+	}
+	else{
+		alert('invald move');
+	}
+}
+
+
+/***
+	Someone is only a winner in tic tac toe if they have 3 in a row:
+		-- horizontally (i.e. in a row)
+		-- vertically (i.e. in a column)
+		-- diagonally (i.e. in a diagonal)
+***/
+function isWinner(){
+	var rowWinner = getRowWinners();
+	var columnWinner = getColumnWinners();
+	var diagonalWinner = getDiagonalWinners();
+	return rowWinner || columnWinner || diagonalWinner;
+}
+
+
+/***
+	setSquare is what is executed after a cell with a '-' is clicked 
+	it will set that cell to "X" or "O" and then make it red or blue respectively
+***/
+function setSquare(square){
+	var isEven = count % 2 == 0;
+	if(isEven){
+		$(square).addClass('redSquare');
+		$(square).text('X')
+	}
+	else{
+		$(square).addClass('blueSquare');
+		$(square).text('O')
+	}
+
+	if(isWinner()){
+		endGame('there is a muthafuckin winna in the house', winnerUrl);
+	}
+	if(isATie()){
+		endGame('goddamn cats are awful', tieUrl);
+	}
+}
+
+
+/***
+	This function is fired when there is either a tie or a winner
+	It sends an alert message and then appends an image. (either a cat image if it's a tie, or a champion image if there's a winner) 
+	
+***/
+function endGame(message, url){
+	setTimeout(function(){
+		alert(message);
+		$('#endGameContent').empty();
+		$('#endGameContent').append('<img class="endGameImage" src="' + url + '"/>');
+	}, 100);
+}
+
+/***
+	This resets the game and is fired when the user clicks "New Game"
+***/
+function clearBoard(){
+	$('#endGameContent').empty();
+	count = 0;
+	clearRow(row0);
+	clearRow(row1);
+	clearRow(row2);
+}
+
+
+/***
+	This function takes in a row and removes any X or O markings and also removes the red/blue coloring
+***/
+function clearRow(row){
+	for(var index in row){
+		var id = row[index];
+		var cell = $('#' + id);
+		cell.text('-');
+		cell.removeClass('redSquare');
+		cell.removeClass('blueSquare');
+	}
+}
+
+
+
+
+/***
+	extractText takes in a list of cell ids and returns their values (either -, X, or O)
+	example return value: ['X', '-', 'O']
+	this is used to extract the values from either rows, columns, or diagonals
+***/
+function extractText(cellIds){
+	var cellText = [];
+	for(var index in cellIds){
+		var id = cellIds[index];
+		var text = $('#' + id).text(); //this equals either -, X, or O
+		cellText.push(text);
+	}
+	return cellText;
+}
+
+
+
+
+/***
+	Someone is a row winner if all the cells in a row are equal to each other and none of them 
+	are equal to a "-"
+***/
+function isRowWinner(row){
+	var rowText = extractText(row);
+	return rowText[0] == rowText[1] && rowText[0] == rowText[2] && rowText[0] != '-';
+}
+/***
+	Checks to see if there is a row winner on all 3 of the rows
+***/
+function getRowWinners(){
+	var firstRowWinner = isRowWinner(row0);
+
+	var secondRowWinner = isRowWinner(row1);
+
+	var thirdRowWinner = isRowWinner(row2);
+
+	return firstRowWinner || secondRowWinner || thirdRowWinner;
+}
+
+
+/***
+	Someone is only a column winner if all of the cells in that column are equal to each other
+	and none of the cells are equal to -
+***/
+function isColumnWinner(colIndex){
+	var columnIds = [row0[colIndex], row1[colIndex], row2[colIndex]];
+	var columnText = extractText(columnIds);
+	return columnText[0] == columnText[1] && columnText[0] == columnText[2] && columnText[0] != '-';
+}
+
+/***
+	Checks to see if there is a column winner on all 3 of the columns
+***/
+function getColumnWinners(){
+	var firstColumnWinner = isColumnWinner(0);
+	var secondColumnWinner = isColumnWinner(1);
+	var thirdColumnWinner = isColumnWinner(2);
+	return firstColumnWinner || secondColumnWinner || thirdColumnWinner;
+}
+
+/***
+	This checks to see if someone won on either of the two diagonal paths
+***/
+function getDiagonalWinners(){
+	var diagonal1 = ['row0col0', 'row1col1', 'row2col2'];
+	var diagonal2 = ['row2col0', 'row1col1', 'row0col2'];
+	var diagonal1Text = extractText(diagonal1);
+	var diagonal2Text = extractText(diagonal2);
+	var isDiagonal1Winner = diagonal1Text[0] == diagonal1Text[1] && diagonal1Text[0] == diagonal1Text[2] && diagonal1Text[0] != '-';
+
+	var isDiagonal2Winner = diagonal2Text[0] == diagonal2Text[1] && diagonal2Text[0] == diagonal2Text[2] && diagonal2Text[0] != '-';
+
+	return isDiagonal1Winner || isDiagonal2Winner;
+}
+
+
+/***
+	A tie occurs when there is not a winner, and all the spaces have been set to either X or O
+***/
+function isATie(){
+	var row0Text = extractText(row0);
+	var row1Text = extractText(row1);
+	var row2Text = extractText(row2);
+
+	var isAWinner = isWinner();
+	var row0Full = row0Text[0] != '-' && row0Text[1] != '-' && row0Text[2] != '-';
+	var row1Full = row1Text[0] != '-' && row1Text[1] != '-' && row1Text[2] != '-';
+	var row2Full = row2Text[0] != '-' && row2Text[1] != '-' && row2Text[2] != '-';
+	//The shorthand ! means NOT so !isAWinner means, there isnt a winner
+	return row0Full && row1Full && row2Full && !isAWinner;
+}
+
+
+
+</script>
+</html>

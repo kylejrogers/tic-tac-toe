@@ -1,0 +1,41 @@
+<html>
+
+<head>
+	
+</head>
+
+<body>
+	
+
+<button>
+	click me!!
+</button>
+
+<img onclick="clicked()" id="image" src="http://jamaicanpatwah.com/assets/img/dictionary/definitions/obese-woman-fatty-boom-boom.jpg"/>
+
+
+
+</body>
+
+<script>
+	var count=0
+function clicked (){
+	var urlone="http://jamaicanpatwah.com/assets/img/dictionary/definitions/obese-woman-fatty-boom-boom.jpg"
+	var urltwo="https://www.askideas.com/media/13/Funny-Fatty-Girl-On-Bicycle.jpg"
+	var image=document.getElementById('image');
+	console.log(image);
+	count=count+1
+	var iseven=count%2==0;
+	if(iseven){
+image.src=urltwo;
+	}
+	else{image.src=urlone;
+
+	}
+}
+
+
+
+</script>
+
+</html>
