@@ -1,0 +1,3 @@
+To save your code 
+	git commit -m "a message about what you changed"
+
