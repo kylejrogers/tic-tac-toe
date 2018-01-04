@@ -25,6 +25,7 @@
 			background-color: blue;
 		}
 	</style>
+			<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
 
 	<!-- This allows access to $ which makes it easy to change the HTML elements and defines the $ variable -->
 		<script
@@ -34,7 +35,7 @@
 </head>
 <body>
 
-<table class="gameBoard">
+<table class="gameBoard table table-striped">
 <tr>
 <!-- passing "this" to make move means you're passing the td element that got clicked -->
 	<td id="row0col0" onclick="makeMove(this)">-</td>
@@ -75,6 +76,8 @@ var winnerUrl = 'http://nolimitssportsandfitness.com/wp-content/uploads/sites/9/
 	This is fired when a user clicks on a tic-tac-toe square
 ***/
 function makeMove(square){
+	console.log(arguments);
+
 	//Jquery is "selecting" the td element and then extracting its text so we can see 
 	//If the text is a -, if it is, set it to an X or O (increment the counter) based on whose turn it is.
 	var squareText = $(square).text();
@@ -226,6 +229,7 @@ function getColumnWinners(){
 	var thirdColumnWinner = isColumnWinner(2);
 	return firstColumnWinner || secondColumnWinner || thirdColumnWinner;
 }
+
 
 /***
 	This checks to see if someone won on either of the two diagonal paths

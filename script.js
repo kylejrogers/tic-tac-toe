@@ -16,7 +16,7 @@ else{
 }
 }
 
-// var cankyledrinkbeer= canDrinkabeer(Kyle);
+ var cankyledrinkbeer= canDrinkabeer(Kyle);
 // console.log(cankyledrinkbeer);
 
 // var shyann={

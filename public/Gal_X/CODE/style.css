@@ -1,0 +1,18 @@
+img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: -1;
+}
+
+@font-face{
+	font-family: edo;
+	src: url('/Gal_X/FONTS/edosz.ttf');
+}
+
+p{
+	color: white;
+	font-size: 72px;
+	font-family: edo;
+	z-index: 0;
+}
