@@ -4,7 +4,7 @@ var app = express();
 
 app.use(express.static('public'));
 app.get('/', function(req, res){
-	res.send('Hello World!');
+	res.sendFile('home.html', {root: 'public'});
 });
 
 app.listen(process.env.PORT || 3000, function(){
