@@ -1,3 +1,19 @@
-To save your code 
-	git commit -m "a message about what you changed"
+To save your code in the Terminal: 
+	git status --  checks the files that you changed (they should appear in red)
+	git add /path/to/file/you/want/to/save.html -- adds the files you want to save
+	git commit -m "a message about what you changed" -- saves the files
 
+To push your code so it's on Heroku:
+	First commit your code with the commands above
+	Then run the command:
+		git push heroku master
+
+
+To push your code to Github
+	First commit your code
+	Then run the command:
+		git push origin master
+
+
+the .gitignore file
+	Anything added to this file will be completely ignored by git and the changes won't be tracked
